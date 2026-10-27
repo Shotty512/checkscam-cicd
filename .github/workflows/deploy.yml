@@ -1,0 +1,125 @@
+name: Deploy CheckScam
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checkscam-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to Ubuntu
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Check project files
+        run: |
+          set -euo pipefail
+          test -f docker-compose.yml
+          test -f checkscam-develop/Dockerfile
+          test -f fe-checkscam-develop/Dockerfile
+          if [ -e .env ]; then
+            echo 'ERROR: .env must not be committed to GitHub'
+            exit 1
+          fi
+
+      - name: Set up SSH from GitHub Secrets
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          ssh-keygen -lf ~/.ssh/known_hosts >/dev/null
+
+      - name: Verify SSH connection and server prerequisites
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          set -euo pipefail
+          [[ "$SSH_PORT" =~ ^[0-9]+$ ]]
+          ssh -i ~/.ssh/id_ed25519 \
+            -p "$SSH_PORT" \
+            -o BatchMode=yes \
+            -o StrictHostKeyChecking=yes \
+            "$SSH_USER@$SSH_HOST" \
+            'test -d /root/huytuan-compose-app/checkscam && test -f /root/huytuan-compose-app/checkscam/.env && command -v docker && command -v rsync && command -v curl'
+
+      - name: Copy source to Ubuntu (preserve .env and .git)
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          set -euo pipefail
+          rsync -az --itemize-changes \
+            --exclude='.git/' \
+            --exclude='.env' \
+            --exclude='.env.*' \
+            --exclude='node_modules/' \
+            --exclude='.gradle/' \
+            --exclude='build/' \
+            --exclude='dist/' \
+            --exclude='*.pem' \
+            --exclude='*.key' \
+            -e "ssh -i $HOME/.ssh/id_ed25519 -p $SSH_PORT -o BatchMode=yes -o StrictHostKeyChecking=yes" \
+            ./ "$SSH_USER@$SSH_HOST:/root/huytuan-compose-app/checkscam/"
+
+      - name: Build, deploy and verify
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/id_ed25519 \
+            -p "$SSH_PORT" \
+            -o BatchMode=yes \
+            -o StrictHostKeyChecking=yes \
+            "$SSH_USER@$SSH_HOST" 'bash -se' <<'REMOTE'
+          set -euo pipefail
+          cd /root/huytuan-compose-app/checkscam
+          test -s .env
+          docker compose -p checkscam config -q
+
+          echo '=== Build backend and frontend ==='
+          docker compose -p checkscam build backend frontend
+
+          echo '=== Deploy backend, then frontend, then nginx ==='
+          docker compose -p checkscam up -d --no-deps --wait --wait-timeout 300 backend
+          docker compose -p checkscam up -d --no-deps --wait --wait-timeout 180 frontend
+          docker compose -p checkscam up -d --no-deps --wait --wait-timeout 180 nginx-proxy
+
+          echo '=== Container status ==='
+          docker compose -p checkscam ps
+
+          echo '=== Recent logs ==='
+          docker compose -p checkscam logs --tail=25 backend frontend nginx-proxy
+
+          echo '=== Backend HTTP and health check ==='
+          curl --fail --silent --show-error --max-time 15 \
+            http://127.0.0.1:8082/actuator/health
+          echo
+
+          echo '=== Nginx HTTP response code (may need domain Host header) ==='
+          curl --silent --show-error --max-time 15 --output /dev/null \
+            --write-out 'HTTP %{http_code}\n' \
+            http://127.0.0.1:8017/
+          REMOTE
