@@ -1,0 +1,58 @@
+<app-header (aiTuVanClicked)="onAiTuVanClicked()"></app-header>
+
+<div class="chat-wrapper">
+  
+  <div>
+    <img width= "380px" src="../../../assets/img/banner.jpg" alt="banner">
+  </div>
+  <div class="chat-container">
+    <div class="chat-display">
+      <div *ngFor="let message of messages"
+           class="message-wrapper"
+           [class.align-right]="message.isUser">
+        <div class="message-content">
+          <div class="message-text">{{ message.text }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="chat-input-wrapper">
+      <div class="chat-input">
+        <select [(ngModel)]="selectedType" class="input-type-select">
+          <option [ngValue]="1">Số điện thoại</option>
+          <option [ngValue]="2">Số tài khoản</option>
+          <option [ngValue]="3">URL</option>
+        </select>
+        <input class="form-control form-control-lg" type="text" placeholder="Nhập thông tin cần tra cứu"
+          [(ngModel)]="info" (keydown.enter)="sendMessage()">
+        <button class="btn btn-primary btn-lg" id="submitButton" type="submit" (click)="sendMessage()"
+          [disabled]="!info.trim()">Gửi</button>
+      </div>
+    </div>
+  </div>
+  <div>
+    <img width= "380px" src="../../../assets/img/banner2.jpg" alt="banner">
+  </div>
+<div>
+    <!-- <img width= "200px" src="https://sdmntprwestus.oaiusercontent.com/files/00000000-1fe8-6230-bd9f-7d981bd4e9b8/raw?se=2025-05-15T04%3A37%3A24Z&sp=r&sv=2024-08-04&sr=b&scid=00000000-0000-0000-0000-000000000000&skoid=61180a4f-34a9-42b7-b76d-9ca47d89946d&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-14T22%3A44%3A54Z&ske=2025-05-15T22%3A44%3A54Z&sks=b&skv=2024-08-04&sig=Vzy54YiWTgmIcIMBMtxgxELhK3xqMzp%2B3XdQ4%2BxuxUw%3D" alt="banner"> -->
+  </div>
+</div>
+
+   <div class="about-us-section">
+    <div class="container">
+      <div class="about-us-content">
+         <div class="graphic-column">
+            <img src="https://chongluadao.vn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Faboutus.c9f1d232.png&w=750&q=75" alt="About Us Graphic">
+          </div>
+
+        <div class="text-column">
+          <p class="section-label">VỀ CHÚNG TÔI</p>
+          <h2 class="section-main-title">VÌ MỘT INTERNET <br> AN TOÀN HƠN</h2>
+          <p class="section-description">Tại Việt Nam, CheckScam - Chúng tôi đang tập trung vào việc bảo vệ và nâng cao nhận thức người dùng về an toàn thông tin.</p>
+            <a routerLink="/about-us" class="btn-about-us">Xem thêm về chúng tôi</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<app-chat-box *ngIf="showChatbox" (close)="closeChatbox()"></app-chat-box>
+<app-footer></app-footer>

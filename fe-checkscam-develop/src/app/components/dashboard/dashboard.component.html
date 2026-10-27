@@ -1,0 +1,29 @@
+<div class="card shadow mb-4">
+  <div class="card-header d-flex justify-content-between align-items-center py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Báo cáo theo Tháng</h6>
+    <select class="form-select w-auto" [(ngModel)]="selectedYear" (ngModelChange)="onYearChange($event)">
+      <option *ngFor="let y of availableYears" [value]="y">Năm {{ y }}</option>
+    </select>
+  </div>
+  <div class="card-body" style="position: relative; height: 300px;">
+    <canvas
+      baseChart
+      [data]="monthlyChartData"
+      [options]="monthlyChartOptions"
+      [type]="monthlyChartType">
+    </canvas>
+  </div>
+</div>
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Báo cáo theo Năm</h6>
+  </div>
+  <div class="card-body" style="position: relative; height: 300px;">
+    <canvas
+      baseChart
+      [data]="yearlyChartData"
+      [options]="yearlyChartOptions"
+      [type]="yearlyChartType">
+    </canvas>
+  </div>
+</div>

@@ -1,0 +1,114 @@
+<!-- QUẢN LÝ TIN TỨC -->
+<div class="container-fluid">
+  <div class="header-actions">
+    <h1 class="h3 mb-2 text-gray-800">Quản lý tin tức</h1>
+
+    <button class="btn btn-primary bg-gradient-primary"
+           routerLink="/create-news" >
+      <i class="fas fa-plus"></i> Thêm
+    </button>
+  </div>
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Danh sách tin tức</h6>
+    </div>
+
+    <div class="card-body table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th style="width:60px">ID</th>
+            <th>Tên</th>
+            <th>Mô tả</th>
+            <th style="width:110px">Hành&nbsp;động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let post of posts">
+            <td>{{ post.id }}</td>
+            <td>
+              <a [routerLink]="['/detail-news', post.id]">{{ post.name }}</a>
+            </td>
+            <td>{{ post.shortDescription }}</td>
+            <td class="text-center">
+              <button class="btn btn-sm edit-btn" routerLink="/update-news/{{post.id}}">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="btn btn-sm delete-btn"
+                      (click)="deleteNews(post.id)">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ========== POPUP ========== -->
+<div class="popup-overlay"
+     *ngIf="isPopupVisible"
+     (click)="closePopup($event)">
+
+  <div class="popup-content">
+    <div class="popup-header">
+      <h5>Thêm tin tức</h5>
+      <button class="close-button" (click)="togglePopup()">×</button>
+    </div>
+
+    <div class="popup-body">
+      <!-- tên -->
+      <div class="form-group mb-3">
+        <label>Tên</label>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="name">
+      </div>
+
+      <!-- mô tả -->
+      <div class="form-group mb-3">
+        <label>Mô tả</label>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="shortDescription">
+      </div>
+
+      <!-- nội dung -->
+      <div class="form-group mb-3">
+        <label>Nội dung</label>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="content">
+      </div>
+
+      <!-- ảnh đính kèm (chỉ 1) -->
+      <div class="form-group mb-3">
+        <label class="d-block">Ảnh đính kèm</label>
+        <button type="button"
+                class="btn btn-outline-primary btn-sm"
+                (click)="fileInput.click()">
+          Chọn ảnh…
+        </button>
+
+        <input #fileInput
+               type="file"
+               accept="image/*"
+               hidden
+               (change)="onFileSelect($event)">
+      </div>
+
+      <!-- hiển thị file -->
+      <div *ngIf="selectedFile" class="mb-3">
+        <label class="form-label">Ảnh đã chọn:</label>
+        <div>{{ selectedFile.name }} ({{ selectedFile.size | number }} bytes)</div>
+      </div>
+    </div>
+
+    <div class="popup-footer">
+      <button class="btn btn-secondary" (click)="togglePopup()">Hủy</button>
+      <button class="btn btn-primary" (click)="createNews()">Tạo</button>
+    </div>
+  </div>
+</div>

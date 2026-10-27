@@ -1,0 +1,51 @@
+<h2>Thêm tin tức</h2>
+
+<div class="mb-3">
+  <label class="form-label">Tên</label>
+  <input type="text"
+         class="form-control"
+         placeholder="Nhập tên"
+         [(ngModel)]="name" />
+</div>
+
+<div class="mb-3">
+  <label class="form-label">Mô tả</label>
+  <input type="text"
+         class="form-control"
+         placeholder="Nhập mô tả"
+         [(ngModel)]="shortDescription" />
+</div>
+
+<div class="mb-3">
+  <label class="form-label">Nội dung</label>
+  <input type="text"
+         class="form-control"
+         placeholder="Nhập nội dung"
+         [(ngModel)]="content" />
+</div>
+
+<div class="mb-3">
+  <label class="form-label" for="files">Ảnh đính kèm (PNG, JPG, GIF)</label>
+  <input id="files"
+         type="file"
+         class="form-control"
+         accept="image/*"
+         multiple
+         (change)="onFileSelect($event)" />
+</div>
+
+<!-- Danh sách file -->
+<div *ngIf="selectedFiles.length" class="mb-3">
+  <label class="form-label">Các tệp đã chọn:</label>
+  <ul class="mb-0">
+    <li *ngFor="let f of selectedFiles">
+      {{ f.name }} ({{ f.size | number }} bytes)
+    </li>
+  </ul>
+</div>
+
+<button type="button"
+        class="btn btn-primary w-100"
+        (click)="createNews()">
+  Tạo
+</button>

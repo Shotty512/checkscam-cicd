@@ -1,0 +1,25 @@
+# Environment variables and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Frontend
+node_modules/
+dist/
+.angular/
+
+# Backend
+.gradle/
+build/
+*.jar
+
+# Logs
+*.log
+
+# Other
+.DS_Store
+*.docx

@@ -1,0 +1,20 @@
+  <div class="chat-box-wrapper">
+    <div class="chat-header">
+      <span>Tư vấn AI</span>
+      <button class="close-button" (click)="close.emit()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="chat-body">
+      <div *ngFor="let message of messages" 
+          class="message-wrapper"
+          [class.user-message]="message.isUser"
+          [class.bot-message]="!message.isUser">
+        <div class="message-content">
+          <div class="message-text">{{ message.text }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="chat-input">
+      <input type="text" placeholder="Nhập tin nhắn..." [(ngModel)]="messageText" (keydown.enter)="sendMessage()">
+      <button (click)="sendMessage()">Gửi</button>
+    </div>
+  </div>

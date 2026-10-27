@@ -1,0 +1,147 @@
+.news-form-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+  .form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    h2 {
+      color: #2c3e50;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: #7f8c8d;
+      font-size: 1rem;
+    }
+  }
+
+  .news-form {
+    .form-group {
+      margin-bottom: 1.5rem;
+
+      .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+        font-weight: 600;
+
+        i {
+          margin-right: 0.5rem;
+          color: #3498db;
+        }
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        transition: 0.2s ease;
+
+        &:focus {
+          border-color: #3498db;
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+        }
+      }
+
+      .content-textarea {
+        min-height: 150px;
+        resize: vertical;
+      }
+    }
+
+    .file-upload-container {
+      .file-hint {
+        margin-top: 0.25rem;
+        color: #95a5a6;
+        font-size: 0.85rem;
+      }
+    }
+
+    .selected-files {
+      background: #f4f6f8;
+      padding: 1rem;
+      border-radius: 6px;
+
+      .file-list {
+        margin-top: 0.5rem;
+
+        .file-item {
+          background: #fff;
+          border: 1px solid #e0e0e0;
+          border-radius: 6px;
+          padding: 0.5rem;
+          display: flex;
+          align-items: center;
+          margin-bottom: 0.5rem;
+
+          i {
+            color: #3498db;
+            margin-right: 0.5rem;
+          }
+
+          .file-name {
+            flex: 1;
+          }
+
+          .file-size {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+          }
+        }
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+
+      button {
+        flex: 1;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: 0.2s ease;
+        cursor: pointer;
+
+        i {
+          margin-right: 0.5rem;
+        }
+
+        &.btn-secondary {
+          background: #ecf0f1;
+          color: #2c3e50;
+
+          &:hover {
+            background: #dcdde1;
+          }
+        }
+
+        &.btn-primary {
+          background: #3498db;
+          color: white;
+
+          &:hover {
+            background: #2980b9;
+          }
+
+          &:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+}

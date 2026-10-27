@@ -1,0 +1,262 @@
+@use 'sass:color';
+.chat-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px); // Điều chỉnh lại nếu chiều cao header khác
+  padding: 20px;
+  background-color: #f4f7f6; // Màu nền nhẹ cho trang chứa box chat
+  padding-top: 90px;
+background: linear-gradient(270deg, #fbb1bf, #ffb89e, #b0f2d6, #a3d8f4);
+  background-size: 800% 800%;
+  animation: gradientAnimation 15s ease infinite;
+  // background-image: url("https://img.pikbest.com/templates/20240828/double-day-99-promotional-sale-banner-for-supermarkets-and-stores_10767527.jpg!w700wp");
+}
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.chat-container {
+  width: 100%;
+  max-width: 700px; // Chiều rộng của box
+  height: calc(100vh - 150px); // Chiều cao của box
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff; // Nền trắng bên trong box
+  overflow: hidden;
+  margin-left: 100px;
+  margin-right: 100px;
+  
+}
+
+.chat-display {
+  flex-grow: 1;
+  overflow-y: auto; // Tạo thanh cuộn
+  padding: 15px;
+  display: flex;
+  flex-direction: column; // Xếp tin nhắn từ trên xuống
+}
+
+.message-wrapper {
+  margin-bottom: 10px;
+  display: flex; // Kích hoạt Flexbox
+
+  // Mặc định (không có class align-right), tin nhắn căn trái (của bot)
+  justify-content: flex-start;
+
+  // Style khi là tin nhắn của người dùng (có class align-right)
+  &.align-right {
+    justify-content: flex-end; // Căn nội dung sang phải
+  }
+}
+
+.message-content {
+  max-width: 80%; // Chiều rộng tối đa của bong bóng chat
+  padding: 8px 12px;
+  border-radius: 15px;
+  word-wrap: break-word;
+
+  // Style cho bong bóng chat của bot (mặc định)
+  background-color: #e5e5ea; // Màu nền xám nhạt
+  color: #333; // Màu chữ
+  // Có thể thêm các style khác như box-shadow nhỏ
+
+  // Style cho bong bóng chat của người dùng (khi message-wrapper có class align-right)
+  .message-wrapper.align-right & { // Áp dụng style cho message-content khi nằm trong message-wrapper.align-right
+    background-color: #0b80f7; // Màu nền xanh dương
+    color: white; // Chữ trắng
+    // Có thể thêm các style khác
+  }
+
+}
+
+.chat-input-wrapper {
+  padding: 15px;
+  border-top: 1px solid #e0e0e0;
+  background-color: #f8f8f8; // Nền nhẹ cho vùng input
+}
+
+.chat-input {
+  display: flex;
+  align-items: center;
+  gap: 10px; // Khoảng cách giữa dropdown, input, button
+
+  .input-type-select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    // Thêm style tùy chỉnh cho dropdown
+  }
+
+  .form-control.form-control-lg {
+    flex-grow: 1; // Input chiếm hết không gian
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 1em;
+    // Điều chỉnh style Bootstrap hoặc viết lại
+  }
+
+  .btn.btn-primary.btn-lg {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+     // Điều chỉnh style Bootstrap hoặc viết lại
+  }
+}
+
+// .info-banner-section {
+//   background-color: #eaf4f4; // Màu nền nhẹ dựa trên hình ảnh
+//   padding: 80px 0; // Khoảng trống trên dưới cho section
+//   position: relative; // Để định vị các phần tử trang trí nếu có
+//   overflow: hidden; // Đảm bảo nội dung không tràn ra ngoài
+
+//   .container {
+//     max-width: 1100px; // Giới hạn chiều rộng nội dung
+//     margin: 0 auto;
+//     padding: 0 15px;
+//     display: flex; // Sử dụng Flexbox để chia cột nội dung text và mô tả
+//     gap: 30px; // Khoảng cách giữa hai cột nội dung
+//     flex-wrap: wrap; // Cho phép xuống dòng trên màn hình nhỏ
+//     align-items: center; // Căn giữa theo chiều dọc
+//   }
+
+//   .banner-content {
+//       display: flex; // Sử dụng flexbox để sắp xếp nội dung chính và ảnh trang trí (nếu có)
+//       width: 100%;
+//       flex-wrap: wrap;
+//       justify-content: space-between; // Đẩy nội dung và ảnh sang hai bên
+//   }
+
+//   .text-content {
+//       flex-basis: 50%; // Cột text chiếm 50% không gian cơ sở
+//       min-width: 300px; // Chiều rộng tối thiểu
+//        @media (max-width: 768px) {
+//             flex-basis: 100%; // Chiếm 100% trên mobile
+//             text-align: center; // Căn giữa text
+//             margin-bottom: 30px; // Khoảng cách dưới trên mobile
+//         }
+//   }
+
+//    .description-content {
+//       flex-basis: 40%; // Cột mô tả chiếm 40% không gian cơ sở
+//       min-width: 250px; // Chiều rộng tối thiểu
+//        @media (max-width: 768px) {
+//             flex-basis: 100%; // Chiếm 100% trên mobile
+//             text-align: center; // Căn giữa text
+//         }
+//    }
+//   }
+
+  /* Style cho Section Về Chúng Tôi */
+.about-us-section {
+  background-color: #ffffff; // Nền trắng (dựa trên hình ảnh)
+  padding: 60px 0; // Khoảng trống trên dưới cho section
+  position: relative;
+  overflow: hidden;
+
+  .container {
+    max-width: 1100px; // Giới hạn chiều rộng nội dung
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+
+  .about-us-content {
+      display: flex; // Sử dụng Flexbox để tạo hai cột
+      align-items: center; // Căn giữa theo chiều dọc
+      gap: 30px; // Khoảng cách giữa hai cột
+      flex-wrap: wrap; // Cho phép xuống dòng trên mobile
+  }
+
+  .graphic-column {
+      flex-basis: 45%; // Cột đồ họa chiếm 45% (có thể điều chỉnh)
+      min-width: 250px; // Chiều rộng tối thiểu
+      text-align: center; // Căn giữa nội dung (ảnh)
+       @media (max-width: 768px) {
+            flex-basis: 100%; // Chiếm 100% trên mobile
+            margin-bottom: 30px; // Khoảng cách dưới trên mobile
+        }
+
+        img {
+            max-width: 100%; // Đảm bảo ảnh không tràn ra ngoài
+            height: auto;
+        }
+  }
+
+  .text-column {
+      flex-basis: 50%; // Cột text chiếm 50% (có thể điều chỉnh)
+      min-width: 300px; // Chiều rộng tối thiểu
+       @media (max-width: 768px) {
+            flex-basis: 100%; // Chiếm 100% trên mobile
+            text-align: center; // Căn giữa text
+        }
+  }
+
+  .section-label {
+    font-size: 0.9em;
+    color: #555; // Màu xám
+    margin-bottom: 5px;
+    font-weight: bold;
+     text-transform: uppercase; // Viết hoa
+     letter-spacing: 1px; // Khoảng cách chữ
+  }
+
+  .section-main-title {
+    font-size: 2em; // Kích thước font tiêu đề chính
+    font-weight: bold;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 15px; // Khoảng cách dưới tiêu đề chính
+    line-height: 1.2;
+     @media (max-width: 768px) {
+        font-size: 1.8em;
+     }
+      br { // Khoảng cách giữa các dòng
+          display: block;
+          content: "";
+          margin-bottom: 5px;
+      }
+  }
+
+  .section-description {
+    font-size: 1em;
+    line-height: 1.6;
+    color: #555; // Màu xám
+    margin-top: 0;
+    margin-bottom: 20px; // Khoảng cách dưới mô tả
+  }
+
+  .btn-about-us {
+    display: inline-block;
+    background-color: #4CAF50; // Màu nền nút (xanh lá cây)
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    &:hover {
+	background-color: color.adjust(#4CAF50, $lightness: -10%);
+    }
+
+     .arrow-icon {
+        // Style cho icon mũi tên
+     }
+  }
+}

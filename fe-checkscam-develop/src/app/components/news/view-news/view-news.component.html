@@ -1,0 +1,45 @@
+<app-header></app-header>
+<div class="container mt-4">
+    <div class="card p-4">
+        <label for="text">Tên</label>
+        <h4 class="fw-bold">{{ post.name }}</h4>
+        <label for="text">Mô tả</label>
+        <p>{{ post.shortDescription }}</p>
+        <label for="text">Nội dung</label>
+        <p>{{ post.content }}</p>
+        <div class="report-section">
+            <label for="attachments-section">Tệp đính kèm</label>
+          
+            <div id="attachments-section"
+                 class="attachments-container mt-2"
+                 *ngIf="attachmentDto?.length; else noAttachments">
+          
+              <div *ngFor="let attachment of attachmentDto; trackBy: trackById"
+                   class="attachment-item mb-3">
+          
+                   <img  [src]="getImageUrl(attachment)"
+                   [alt]="getFileName(attachment)"
+                   class="img-fluid rounded report-image"
+                   (click)="openImage(getImageUrl(attachment))"
+                   (error)="onImageError($event)">
+             
+             <p class="text-muted small mt-1">
+               {{ getFileName(attachment) }}
+             </p>
+              </div>
+            </div>
+          
+            <ng-template #noAttachments>
+              <p class="report-value">Không có tệp đính kèm.</p>
+            </ng-template>
+          
+            <!-- Lightbox -->
+            <div class="lightbox" *ngIf="selectedImageUrl" (click)="closeImage()">
+              <img [src]="selectedImageUrl" alt="Xem ảnh">
+            </div>
+          </div>
+          
+    </div>
+</div>
+
+<!-- <app-footer></app-footer> -->

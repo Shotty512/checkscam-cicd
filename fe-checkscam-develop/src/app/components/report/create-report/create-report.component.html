@@ -1,0 +1,121 @@
+<app-header (aiTuVanClicked)="onAiTuVanClicked()"></app-header>
+
+<div class="report-page-container">
+  <div class="two-column-layout">
+
+    <!-- ========== LEFT COLUMN ========= -->
+    <div class="left-column">
+      <form class="report-form" #reportForm="ngForm" (ngSubmit)="createReport()" novalidate>
+        <h3 class="info-box-title">BÁO CÁO LỪA ĐẢO</h3>
+
+        <!-- Thông tin liên quan -->
+        <div class="form-group">
+          <label for="info">Thông tin liên quan:</label>
+          <input
+            id="info"
+            type="text"
+            name="info"
+            placeholder="Nhập số thông tin nghi ngờ"
+            required
+            [(ngModel)]="info"
+            #infoCtrl="ngModel"
+          />
+        </div>
+
+        <!-- Loại thông tin + Ngân hàng (chỉ hiển thị khi là STK) -->
+        <div class="form-group">
+          <label for="type">Loại thông tin:</label>
+          <select id="type" name="type" required [(ngModel)]="type">
+            <option [ngValue]="1">Số điện thoại</option>
+            <option [ngValue]="2">Số tài khoản</option>
+            <option [ngValue]="3">URL</option>
+          </select>
+        </div>
+
+        <div class="form-group" *ngIf="type === 2">
+          <label for="accountHolderName">Tên chủ tài khoản:</label>
+          <input id="accountHolderName" name="accountHolderName" type="text" [(ngModel)]="accountHolderName" />
+
+          <label for="bankName">Ngân hàng:</label>
+          <input id="bankName" name="bankName" type="text" [(ngModel)]="bankName" />
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email người báo cáo</label>
+          <input
+            id="email"
+            type="email"
+            name="emailAuthorReport"
+            placeholder="Nhập email"
+            required
+            [(ngModel)]="emailAuthorReport"
+          />
+        </div>
+
+        <!-- Mô tả -->
+        <div class="form-group">
+          <label for="description">Mô tả chi tiết:</label>
+          <textarea
+            id="description"
+            name="infoDescription"
+            rows="5"
+            required
+            placeholder="Mô tả chi tiết về vụ việc"
+            [(ngModel)]="infoDescription"
+          ></textarea>
+        </div>
+
+        <!-- File upload -->
+        <div class="form-group">
+          <label for="files">Tài liệu đính kèm (PNG, JPG, GIF):</label>
+          <input id="files" type="file" accept="image/*" multiple (change)="onFileSelect($event)" />
+        </div>
+
+        <div class="form-group" *ngIf="selectedFiles.length">
+          <label>Các tệp đã chọn:</label>
+          <ul>
+            <li *ngFor="let f of selectedFiles">{{ f.name }} ({{ f.size | number }} bytes)</li>
+          </ul>
+        </div>
+
+        <!-- Captcha -->
+        <div class="form-group">
+          <re-captcha siteKey="6LfG6TArAAAAAD3M_YLwgUHuC6QPL7I7ATnWE4Xl" (resolved)="handleCaptchaResponse($event)"></re-captcha>
+        </div>
+
+        <button class="submit-button" type="submit" [disabled]="reportForm.invalid || !captchaToken">
+          Gửi Báo Cáo
+        </button>
+      </form>
+    </div>
+
+    <!-- ========== RIGHT COLUMN ========= -->
+    <div class="right-column">
+      <div class="info-box">
+        <div class="info-section">
+          <h4 class="section-title"><i class="info-icon warning">!</i> Chú ý</h4>
+          <p>Thông Báo về Việc Báo Cáo các Trang Web Cá Độ, Cờ Bạc, 18+,...</p>
+          <p>Theo đánh giá và thống kê từ cộng đồng, các trang web có nội dung 18+, cá độ bóng đá, cờ bạc trực tuyến đều vi phạm pháp luật Việt Nam với mức độ 100%.</p>
+          <p class="highlight-text"><i class="info-icon warning">!</i> Vì vậy, bạn <strong>KHÔNG CẦN</strong> phải gửi báo cáo các trang web dạng này lên hệ thống của chúng tôi.</p>
+          <p>Chúng tôi luôn trân trọng đóng góp quý báu từ cộng đồng. Việc không cần báo cáo những trang vi phạm pháp luật rõ ràng giúp chúng tôi tập trung nguồn lực vào việc xử lý các trang web lừa đảo tinh vi và gây hại đến người dùng.</p>
+        </div>
+
+        <div class="info-section">
+          <h4 class="section-title"><i class="info-icon info">i</i> Thông tin quan trọng</h4>
+          <p>Trước khi báo cáo, vui lòng kiểm tra thông tin trên hệ thống của chúng tôi. Nếu không có, hãy theo các bước để báo cáo. CheckScam sẽ xét duyệt kỹ lưỡng và quyết định cuối cùng.</p>
+          <p>Ngoài ra bạn có thể tham khảo thông tin hữu ích khác:</p>
+          <ul class="reference-links">
+            <li><a href="https://chongluadao.vn/" target="_blank">Chống lừa đảo</a> <i class="link-icon">↗</i></li>
+            <li><a href="https://tinnhiemmang.vn/" target="_blank">Tín nhiệm mạng</a> <i class="link-icon">↗</i></li>
+            <li><a href="https://khonggianmang.vn/" target="_blank">Không gian mạng</a> <i class="link-icon">↗</i></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<app-chat-box *ngIf="showChatbox" (close)="closeChatbox()"></app-chat-box>
+<app-footer></app-footer>

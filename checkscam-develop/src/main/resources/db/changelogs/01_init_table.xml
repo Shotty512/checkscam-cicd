@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20250429-001" author="tientm">
+        <sqlFile path="db/sql/20250429_init_db.sql"/>
+    </changeSet>
+    <changeSet id="20250429-001" author="games-on">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="users" columnName="created_at"/>
+            <columnExists tableName="users" columnName="is_active"/>
+        </preConditions>
+        <dropColumn tableName="users" columnName="created_at"/>
+        <dropColumn tableName="users" columnName="is_active"/>
+    </changeSet>
+    <changeSet id="20250502-001" author="tientm">
+        <sqlFile path="db/sql/20250502_alter_table.sql"/>
+    </changeSet>
+    <changeSet id="20250504-001" author="tientm">
+        <sqlFile path="db/sql/20250504_alter_table_report.sql"/>
+    </changeSet>
+    <changeSet id="20250505-001" author="tientm">
+        <sqlFile path="db/sql/20250505_add_table_scam_type.sql"/>
+    </changeSet>
+    <changeSet id="20250505-002" author="tientm">
+        <sqlFile path="db/sql/20250505_alter_table_report.sql"/>
+    </changeSet>
+    <changeSet id="20250505" author="games-on">
+        <sqlFile path="db/sql/20250505_refresh_token.sql"/>
+    </changeSet>
+    <changeSet id="20250506-001" author="tientm">
+        <sqlFile path="db/sql/20250506_alter_table_bank_scam.sql"/>
+    </changeSet>
+    <changeSet id="20250506" author="games-on">
+        <sqlFile path="db/sql/20250506_change_news.sql"/>
+    </changeSet>
+</databaseChangeLog>

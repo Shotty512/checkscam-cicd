@@ -1,0 +1,118 @@
+.app-footer {
+  background-color: #1a313a; // Màu nền chân trang dựa trên hình ảnh
+  color: #ffffff; // Màu chữ mặc định là trắng
+  padding: 20px 0; // Khoảng trống trên dưới
+  font-size: 0.9em; // Kích thước font nhỏ hơn
+
+  .container {
+    max-width: 1200px; // Giới hạn chiều rộng nội dung
+    margin: 0 auto; // Căn giữa container
+    padding: 0 15px; // Padding hai bên
+    display: flex; // Sử dụng flexbox để chia trái phải
+    justify-content: space-between; // Đẩy nội dung sang hai bên
+    align-items: center; // Căn giữa theo chiều dọc
+    flex-wrap: wrap; // Cho phép xuống dòng trên màn hình nhỏ
+  }
+
+  .footer-left,
+  .footer-right {
+    display: flex;
+    // gap: 40px; // Khoảng cách giữa các nhóm thông tin (ví dụ: icon và text info) - Có thể điều chỉnh
+    align-items: center; // Căn giữa các mục con theo chiều dọc
+    flex-wrap: wrap; // Cho phép các mục con xuống dòng nếu cần
+  }
+
+   .footer-left {
+       flex-basis: 60%; // Chiếm khoảng 60% chiều rộng (có thể điều chỉnh)
+       gap: 40px; // Khoảng cách giữa nhóm icon và thông tin liên hệ
+       @media (max-width: 768px) { // Trên màn hình nhỏ hơn 768px
+           flex-basis: 100%; // Chiếm 100% chiều rộng
+           justify-content: center; // Căn giữa nội dung
+           gap: 20px; // Giảm khoảng cách
+           margin-bottom: 20px; // Thêm khoảng cách dưới
+       }
+   }
+
+   .footer-right {
+       flex-basis: 35%; // Chiếm khoảng 35% chiều rộng (có thể điều chỉnh)
+        @media (max-width: 768px) { // Trên màn hình nhỏ hơn 768px
+           flex-basis: 100%; // Chiếm 100% chiều rộng
+           text-align: center; // Căn giữa nội dung text
+       }
+   }
+
+
+  .footer-item {
+    margin-bottom: 10px; // Khoảng cách dưới mỗi item (trên mobile có thể cần)
+    @media (min-width: 769px) {
+         margin-bottom: 0; // Bỏ margin dưới trên desktop
+    }
+
+    &.contact-info,
+    &.design-info {
+        p {
+            margin: 5px 0; // Giảm khoảng cách giữa các dòng text
+            color: #b0c0c0; // Màu chữ nhạt hơn một chút
+        }
+         a {
+            color: #ffffff; // Màu link là trắng
+            text-decoration: none; // Bỏ gạch chân link
+            transition: color 0.3s ease;
+
+            &:hover {
+                color: #4caf50; // Highlight khi hover (có thể chỉnh màu này)
+            }
+        }
+    }
+  }
+
+  .language-scroll {
+      display: flex;
+      flex-direction: column; // Xếp cờ và mũi tên theo cột
+      align-items: center; // Căn giữa theo chiều ngang
+      gap: 10px; // Khoảng cách giữa cờ và mũi tên
+
+      .flag-icon img,
+      .scroll-to-top img {
+          width: 30px; // Kích thước icon (có thể điều chỉnh)
+          height: 30px;
+          cursor: pointer;
+      }
+
+      .scroll-to-top {
+          cursor: pointer; // Biểu thị có thể click
+      }
+
+      // Nếu dùng icon font
+       .flag-icon i,
+       .scroll-to-top i {
+           font-size: 2em; // Kích thước icon font (có thể điều chỉnh)
+       }
+  }
+
+
+  .chat-icon {
+      position: fixed; // Cố định vị trí
+      bottom: 20px; // Cách đáy 20px
+      right: 20px; // Cách lề phải 20px
+      background-color: #4CAF50; // Màu nền icon chat (xanh lá)
+      color: white; // Màu icon là trắng
+      border-radius: 50%; // Bo tròn thành hình tròn
+      width: 50px; // Kích thước icon chat
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); // Đổ bóng
+      z-index: 1000; // Đảm bảo icon nằm trên cùng
+       img {
+           width: 30px; // Kích thước ảnh icon bên trong
+           height: 30px;
+       }
+       // Nếu dùng icon font
+       i {
+           font-size: 1.5em; // Kích thước icon font
+       }
+  }
+}

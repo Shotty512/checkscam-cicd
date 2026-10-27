@@ -1,0 +1,54 @@
+
+  <div class="container-fluid">
+    <div class="header-actions">
+      <h1 class="h3 mb-2 text-gray-800">Quản lý tài khoản</h1>
+      <div class="dataTables_length" id="dataTable_length">
+        <button class="btn btn-primary bg-gradient-primary" (click)="openDialogCreateUser()"><i class="fas fa-plus"></i>
+          Thêm</button>
+      </div>
+    </div>
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Danh sách tài khoản</h6>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <div class="row">
+              <div class="col-sm-12 col-md-6">
+                <div id="dataTable_filter" class="dataTables_filter"></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid"
+                  aria-describedby="dataTable_info" style="width: 100%;">
+                  <thead>
+                    <tr role="row">
+                      <th aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending" style="width: 20px;">ID
+                      </th>
+                      <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width: 247.7px;">Tên người dùng</th>
+                      <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                        style="width: 247.7px;">Email</th>
+                      <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                        style="width: 78.2px;">Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="odd" *ngFor="let account of accounts">
+                      <td class="sorting_1">{{ account.id }}</td>
+                      <td>{{ account.name }}</td>
+                      <td>{{ account.email }}</td>
+                      <td>
+                        <button class="btn edit-btn" (click)="openDialogUpdateUser(account)">
+                          <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button class="btn delete-btn" (click)="deleteUser(account.id)"><i
+                            class="fa-solid fa-trash"></i></button>
+                      </td>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>

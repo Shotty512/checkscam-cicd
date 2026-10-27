@@ -1,0 +1,189 @@
+.news-page-container {
+  min-height: 100vh;
+  background-color: #f4f7f6; /* Màu nền nhẹ cho trang */
+  padding-top: 75px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Căn giữa nội dung trang theo chiều ngang */
+}
+
+.news-page-container .page-content-area {
+  padding: 20px 0;
+  width: 100%; /* Đảm bảo chiếm hết chiều rộng của container cha */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Căn giữa nội dung bên trong khu vực nội dung */
+}
+
+.news-page-container .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  width: 100%; /* Đảm bảo chiếm hết chiều rộng của khu vực nội dung */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Căn giữa các phần tử con */
+}
+
+.news-page-container .page-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 2em;
+  font-weight: bold;
+  width: 100%; /* Chiếm hết chiều rộng để căn giữa text */
+}
+
+.news-page-container .search-and-pagination {
+  display: flex;
+  flex-direction: column; /* Xếp chồng tìm kiếm và phân trang */
+  align-items: center; /* Căn giữa theo chiều ngang */
+  margin-bottom: 30px;
+  gap: 20px; /* Khoảng cách giữa tìm kiếm và phân trang */
+  width: 80%; /* Điều chỉnh độ rộng của khu vực tìm kiếm và phân trang */
+  max-width: 600px; /* Độ rộng tối đa */
+}
+
+.news-page-container .search-and-pagination .search-bar {
+  display: flex;
+  gap: 5px;
+  width: 100%; /* Chiếm hết chiều rộng của container cha */
+}
+
+.news-page-container .search-and-pagination .search-bar input[type="text"] {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+  flex-grow: 1;
+}
+
+.news-page-container .search-and-pagination .search-bar button {
+  padding: 8px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.news-page-container .search-and-pagination .search-bar button:hover {
+  background-color: #0056b3;
+}
+
+.news-page-container .search-and-pagination .pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.news-page-container .search-and-pagination .pagination-controls button {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.news-page-container .search-and-pagination .pagination-controls button:hover {
+  background-color: #f0f0f0;
+}
+
+.news-page-container .search-and-pagination .pagination-controls span {
+  font-weight: bold;
+  cursor: pointer; /* Thêm con trỏ chuột để chỉ ra có thể nhấp */
+  padding: 5px 8px;
+  border: 1px solid transparent; /* Để không làm thay đổi layout khi hover */
+  border-radius: 4px;
+}
+
+.news-page-container .search-and-pagination .pagination-controls span.active {
+  border-color: #007bff;
+  color: #007bff;
+}
+
+.news-page-container .news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Tạo lưới với các cột có chiều rộng tối thiểu 280px */
+  gap: 20px; /* Khoảng cách giữa các card */
+  width: 80%; /* Điều chỉnh độ rộng của lưới tin tức */
+  max-width: 1200px; /* Độ rộng tối đa của lưới tin tức */
+}
+
+.news-page-container .news-grid .news-card {
+  border: 1px solid #eee; /* Viền nhẹ */
+  border-radius: 8px; /* Góc bo tròn */
+  overflow: hidden; /* Đảm bảo nội dung và ảnh không tràn ra ngoài viền bo tròn */
+  background-color: #fff; /* Nền trắng cho card */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+  display: flex;
+  flex-direction: column; /* Sắp xếp nội dung bên trong card theo cột (ảnh trên, text dưới) */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng khi di chuột vào */
+  cursor: pointer; /* Biểu thị rằng card có thể click được */
+}
+
+.news-page-container .news-grid .news-card:hover {
+  transform: translateY(-5px); /* Nâng card lên một chút khi hover */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Đổ bóng rõ hơn khi hover */
+}
+
+.news-page-container .news-grid .news-card .card-image {
+  width: 100%;
+  height: 180px; /* Chiều cao cố định cho vùng ảnh */
+  overflow: hidden;
+}
+
+.news-page-container .news-grid .news-card .card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cắt ảnh để vừa khung mà không bị méo */
+}
+
+.news-page-container .news-grid .news-card .card-content {
+  padding: 15px; /* Khoảng trống bên trong phần nội dung text */
+  flex-grow: 1; /* Cho phép phần nội dung text co giãn để các card có chiều cao bằng nhau */
+  display: flex;
+  flex-direction: column;
+}
+
+.news-page-container .news-grid .news-card .card-content .card-title {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.news-page-container .news-grid .news-card .card-content .card-title a {
+  text-decoration: none;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.news-page-container .news-grid .news-card .card-content .card-title a:hover {
+  color: #007bff;
+}
+
+.news-page-container .news-grid .news-card .card-content .card-description {
+  color: #555;
+  font-size: 0.9em;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  flex-grow: 1; /* Cho phép mô tả co giãn */
+}
+
+.news-page-container .news-grid .news-card .card-content .card-footer {
+  display: flex;
+  justify-content: flex-end;
+  color: #777;
+  font-size: 0.8em;
+}
+
+.news-page-container .pagination-info {
+  text-align: center;
+  margin-top: 20px;
+  color: #555;
+  width: 100%; /* Căn giữa thông tin phân trang */
+}

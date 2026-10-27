@@ -1,0 +1,197 @@
+h2 {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      color: #333;
+      font-size: 1.5em;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .search-bar {
+      display: flex;
+
+      input[type='text'] {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px 0 0 4px;
+        outline: none;
+        background-color: #f8f8f8;
+      }
+
+      button {
+        background-color: transparent;
+        color: #555;
+        border: 1px solid #ccc;
+        padding: 8px 12px;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #eee;
+      }
+
+      i {
+        margin-right: 5px;
+      }
+    }
+
+    .add-btn {
+      background-color: #28a745;
+      /* Green */
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .add-btn:hover {
+      background-color: #218838;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      background-color: #fff;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    .data-table th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .data-table tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    .action-icons {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .icon-button {
+      border: none;
+      background: none;
+      font-size: 1.1rem;
+      padding: 4px 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color .2s;
+
+      &:hover {
+        background: #f0f0f0;
+      }
+    }
+
+    .icon-button:nth-child(1) {
+      color: #28a745;
+    }
+
+    // xác nhận – xanh
+    .icon-button:nth-child(2) {
+      color: #dc3545;
+    }
+
+    // từ chối   – đỏ
+
+    .icon-button i {
+      font-size: 1em;
+    }
+
+    .icon-button:hover {
+      background-color: #eee;
+      color: #007bff;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      padding: 10px 0;
+      border-top: 1px solid #eee;
+      color: #555;
+      font-size: 0.9em;
+    }
+
+    .records-per-page label {
+      margin-right: 10px;
+    }
+
+    .records-per-page select {
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #f8f8f8;
+      color: #555;
+    }
+
+    .page-navigation button {
+      background-color: #eee;
+      /* Grey buttons */
+      border: 1px solid #ccc;
+      padding: 6px 10px;
+      margin: 0 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      color: #555;
+    }
+
+    .page-navigation button:hover {
+      background-color: #ddd;
+    }
+
+    .page-navigation span {
+      margin: 0 10px;
+    }
+
+    .dropdown-card {
+      position: absolute;
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 12px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+      z-index: 100;
+      width: 240px;
+
+      select,
+      input {
+        width: 100%;
+        padding: 6px 8px;
+        margin-bottom: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      .close-btn {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+    }

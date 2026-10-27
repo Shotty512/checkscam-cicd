@@ -1,0 +1,231 @@
+@use 'sass:color';
+  /* report.component.scss */
+
+  .report-page-container {
+    padding-top: 70px; /* Điều chỉnh giá trị này bằng chiều cao header thực tế */
+    // padding-bottom: 40px; /* Khoảng trống dưới cùng trước footer */
+    background-color: #f8f9fa; /* Màu nền nhẹ cho trang */
+    min-height: calc(100vh - 70px - 50px); /* Đảm bảo trang đủ cao */
+  }
+
+  .two-column-layout {
+    display: flex; /* Sử dụng Flexbox để tạo hai cột */
+    max-width: 1100px; /* Chiều rộng tối đa của vùng hai cột */
+    margin: 0 auto; /* Căn giữa vùng hai cột */
+    gap: 30px; /* Khoảng cách giữa hai cột */
+    padding: 0 15px; /* Padding hai bên */
+    flex-wrap: wrap; /* Cho phép các cột xuống dòng trên màn hình nhỏ */
+      align-items: stretch; /* Quan trọng: Đảm bảo các cột co giãn bằng nhau theo chiều dọc */
+
+  }
+
+  .left-column {
+    flex-basis: 60%; /* Cột trái chiếm 60% (có thể điều chỉnh) */
+    flex-grow: 1; /* Cho phép cột trái giãn ra nếu có không gian */
+    min-width: 300px; /* Chiều rộng tối thiểu của cột trái */
+    @media (max-width: 768px) {
+        flex-basis: 100%; /* Chiếm 100% trên màn hình nhỏ */
+    }
+  }
+
+  .right-column {
+    flex-basis: 35%; /* Cột phải chiếm 35% (có thể điều chỉnh) */
+    flex-grow: 1; /* Cho phép cột phải giãn ra */
+    min-width: 250px; /* Chiều rộng tối thiểu của cột phải */
+      @media (max-width: 768px) {
+        flex-basis: 100%; /* Chiếm 100% trên màn hình nhỏ */
+    }
+  }
+
+  /* Style cho form báo cáo */
+  .report-form {
+    background-color: #ffffff; /* Nền trắng cho form */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ cho form */
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+    }
+
+    .form-group {
+      margin-bottom: 15px; /* Khoảng cách giữa các group form */
+
+      label {
+        display: block; /* Hiển thị label trên một dòng riêng */
+        margin-bottom: 5px; /* Khoảng cách dưới label */
+        font-weight: bold;
+        color: #555;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      select,
+      textarea {
+        width: 100%; /* Chiều rộng đầy đủ */
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1em;
+        box-sizing: border-box; /* Tính cả padding và border vào width */
+      }
+
+      textarea {
+          resize: vertical; /* Chỉ cho phép resize theo chiều dọc */
+      }
+
+      .checkbox-group {
+          display: flex;
+          align-items: center;
+          input[type="checkbox"] {
+              margin-right: 10px;
+          }
+          label {
+              display: inline; /* Label checkbox hiển thị cùng dòng */
+              font-weight: normal;
+              color: #333;
+              a {
+                  color: #007bff; /* Màu link điều khoản */
+                  text-decoration: none;
+                  &:hover {
+                      text-decoration: underline;
+                  }
+              }
+          }
+      }
+    }
+
+    .captcha-placeholder {
+        border: 1px dashed #ccc;
+        padding: 15px;
+        text-align: center;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        color: #777;
+    }
+
+
+    .submit-button {
+      display: block; /* Button chiếm toàn bộ chiều rộng */
+      width: 100%;
+      padding: 12px;
+      background-color: #28a745; /* Màu xanh lá cây */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+
+      &:hover {
+	background-color: color.adjust(#28a745, $lightness: -10%);
+      }
+    }
+
+    .btn[routerLink="/chatbot"] {
+          display: block;
+          width: 100%;
+          text-align: center;
+          margin-top: 10px;
+          padding: 12px;
+          background-color: #6c757d; /* Màu xám cho nút trở lại */
+          color: white;
+          border: none;
+          border-radius: 5px;
+          font-size: 1.1em;
+          font-weight: bold;
+          cursor: pointer;
+          text-decoration: none; /* Bỏ gạch chân link nếu dùng a tag */
+          transition: background-color 0.3s ease;
+
+          &:hover {
+              background-color: color.adjust(#6c757d, $lightness: -10%);
+          }
+      }
+  }
+  .info-box-title {
+          text-align: center;
+          color: #d9534f; /* Màu đỏ cho tiêu đề chính */
+          margin-top: 0;
+          margin-bottom: 20px;
+          font-size: 1.5em;
+          font-weight: bold;
+      }
+
+  /* Style cho cột thông tin bên phải */
+  .info-box {
+      background-color: #ffffff; /* Nền trắng cho box thông tin */
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
+      margin-bottom: 20px; // Khoảng cách nếu có nhiều info-box
+
+      .info-section {
+          margin-bottom: 20px; /* Khoảng cách giữa các phần thông tin */
+
+          .section-title {
+              color: #0275d8; /* Màu xanh dương cho tiêu đề section */
+              margin-top: 0;
+              margin-bottom: 10px;
+              font-size: 1.2em;
+              font-weight: bold;
+              display: flex; // Dùng flexbox để căn icon và text
+              align-items: center;
+
+              .info-icon {
+                  margin-right: 8px;
+                  font-size: 1.1em;
+                  &.warning { color: #f0ad4e; } /* Màu icon cảnh báo (vàng) */
+                  &.info { color: #0275d8; } /* Màu icon thông tin (xanh dương) */
+              }
+          }
+
+          p {
+              margin-top: 0;
+              margin-bottom: 10px;
+              line-height: 1.6;
+              color: #333;
+              a {
+                  color: #007bff; /* Màu link trong nội dung */
+                  text-decoration: none;
+                  &:hover {
+                      text-decoration: underline;
+                  }
+              }
+              &.highlight-text {
+                  color: #d9534f; /* Màu đỏ cho text highlight */
+                  font-weight: bold;
+              }
+          }
+
+          .reference-links {
+              list-style: none; /* Bỏ bullet mặc định của list */
+              padding: 0;
+              margin: 0;
+
+              li {
+                  margin-bottom: 8px; /* Khoảng cách giữa các item list */
+                  display: flex;
+                  align-items: center;
+
+                  a {
+                      color: #007bff; /* Màu link tham khảo */
+                      text-decoration: none;
+                      &:hover {
+                          text-decoration: underline;
+                      }
+                  }
+                  .link-icon {
+                      margin-left: 8px;
+                      font-size: 0.9em;
+                      color: #555;
+                  }
+              }
+          }
+      }
+  }

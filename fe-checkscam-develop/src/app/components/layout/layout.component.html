@@ -1,0 +1,140 @@
+  <div id="wrapper">
+    <div>
+      <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" routerLink="/users"
+          routerLinkActive="active">
+          <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          CheckScam
+        </a>
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <hr class="sidebar-divider my-0">
+        <!-- Admin only menu items -->
+        <ng-container *ngIf="isAdmin">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/users" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+              <i class="fa-solid fa-users"></i>
+              <span>Quản lý tài khoản</span>
+            </a>
+          </li>
+        </ng-container>
+
+        <!-- Common menu items for both Admin and Collaborator -->
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/news" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <i class="fa-solid fa-newspaper"></i>
+            <span>Quản lý tin tức</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/reports" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <i class="fa-solid fa-scroll"></i>
+            <span>Quản lý báo cáo</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
+
+            <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+            <li class="nav-item dropdown no-arrow d-sm-none">
+              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search fa-fw"></i>
+              </a>
+              <!-- Dropdown - Messages -->
+              <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                aria-labelledby="searchDropdown">
+                <form class="form-inline mr-auto w-100 navbar-search">
+                  <div class="input-group">
+                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                      aria-label="Search" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" type="button">
+                        <i class="fas fa-search fa-sm"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </li>
+
+            <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle" id="userDropdown" role="button" (click)="toggleDropdown()"
+                [class.show]="isDropdownOpen" aria-haspopup="true" [attr.aria-expanded]="isDropdownOpen">
+                <div class="user-info">
+                  <span class="user-email">{{currentUser.email}}</span>
+                </div>
+                <div class="user-profile">
+                  <img class="img-profile rounded-circle" src="/assets/img/undraw_profile.svg">
+                </div>
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" [class.show]="isDropdownOpen"
+                aria-labelledby="userDropdown">
+                <a class="dropdown-item">
+                  <i class="fa-solid fa-address-card"></i>
+                  Thông tin tài khoản
+                </a>
+                <a class="dropdown-item" (click)="logout()">
+                  <i class="fa-solid fa-right-from-bracket"></i>
+                  Đăng xuất
+                </a>
+              </div>
+            </li>
+
+          </ul>
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <router-outlet></router-outlet>
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <!-- <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Your Website 2021</span>
+          </div>
+        </div>
+      </footer> -->
+      <!-- End of Footer -->
+
+    </div>
+
+  </div>

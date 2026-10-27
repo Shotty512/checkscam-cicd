@@ -1,0 +1,64 @@
+<app-header (aiTuVanClicked)="onAiTuVanClicked()"></app-header>
+<div class="news-page-container">
+  <div class="page-content-area">
+    <div class="container">
+      <h2 class="page-title">Trang tin tức</h2>
+
+      <!-- Search + Pagination Top -->
+      <div class="search-and-pagination">
+        <div class="search-bar">
+          <input
+            type="text"
+            placeholder="Tìm kiếm tin tức..."
+            [(ngModel)]="searchTerm"
+            (input)="searchPosts()"
+          />
+          <button (click)="searchPosts()">Tìm kiếm</button>
+        </div>
+
+        <div class="pagination-controls">
+          <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">&lt;</button>
+
+          <span
+            *ngFor="let page of pages"
+            [class.active]="currentPage === page"
+            (click)="changePage(page)"
+            >{{ page }}</span
+          >
+
+          <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">&gt;</button>
+        </div>
+      </div>
+
+      <!-- Grid -->
+      <div class="news-grid">
+        <div
+          class="news-card"
+          *ngFor="let post of pagedPosts; trackBy: trackById"
+        >
+          <div class="card-image">
+            <img
+              [src]="post.attachments?.length ? getImageUrl(post.attachments[0]) : 'assets/img/placeholder.png'"
+              (error)="onImageError($event)"
+              alt="Ảnh tin tức"
+            />
+          </div>
+
+          <div class="card-content">
+            <h3 class="card-title">
+              <a [routerLink]="'/view-news/' + post.id">{{ post.name }}</a>
+            </h3>
+            <p class="card-description">{{ post.shortDescription }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pagination-info">
+        Hiển thị {{ startIndex + 1 }} - {{ endIndex + 1 }} của {{ totalPosts }} tin tức
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-chat-box *ngIf="showChatbox" (close)="closeChatbox()"></app-chat-box>
+<app-footer></app-footer>

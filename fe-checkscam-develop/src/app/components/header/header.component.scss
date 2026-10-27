@@ -1,0 +1,60 @@
+.header-nav {
+  background-color: #1a313a;
+  height: 64px; // ⬅️ Thêm chiều cao cố định cho header
+  padding: 0; // ⬅️ Loại bỏ padding trên dưới gây lệch
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease-in-out;
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; // ✅ Căn giữa dọc các phần tử
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px; // tăng padding ngang cho dễ nhìn
+    height: 100%; // ✅ đảm bảo con chiếm full chiều cao header
+  }
+
+  .brand {
+    color: #fff;
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-decoration: none;
+    display: flex;
+    align-items: center; // ✅ căn giữa dọc text brand
+    height: 100%; // để nó align theo header
+  }
+
+  .nav-links {
+    display: flex;
+    list-style: none;
+    gap: 24px;
+    align-items: center; 
+    margin: 0px;
+
+    li a {
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      display: flex;
+      align-items: center; // ✅ căn giữa text trong link
+      height: 100%;
+    }
+
+    li a:hover {
+      background-color: #38bdf8;
+      box-shadow: 0 4px 10px rgba(56,189,248,0.4);
+      transform: translateY(-2px);
+    }
+  }
+
+  &.hidden {
+    transform: translateY(-100%);
+  }
+}

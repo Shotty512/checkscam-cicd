@@ -1,0 +1,213 @@
+
+  .mb-4, .my-4 {
+    margin-bottom: 1.5rem !important;
+  }
+
+  .shadow {
+    box-shadow: 0 .15rem 1.75rem 0 rgba(58, 59, 69, .15) !important;
+  }
+  .card {
+    position: relative;
+    display: flex
+  ;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid #e3e6f0;
+    border-radius: .35rem;
+  }
+  *, ::after, ::before {
+    box-sizing: border-box;
+  }
+
+  div {
+    display: block;
+    unicode-bidi: isolate;
+  }
+
+  body {
+    margin: 0;
+    font-family: Nunito, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #858796;
+    text-align: left;
+    background-color: #fff;
+  }
+
+  .bg-gradient-primary {
+    background-color: #4e73df;
+    background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+    background-size: cover;
+  }
+
+  .edit-btn:hover,
+  .delete-btn:hover {
+    cursor: circle; /* Thay đổi con trỏ chuột thành hình tròn */
+    opacity: 0.7; /* Làm mờ button (giảm độ непрозрачность xuống 70%) */
+    transition: cursor 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  }
+
+  .header-actions {
+      display: flex; /* Thiết lập container là flex container */
+      justify-content: space-between; /* Đẩy tiêu đề sang trái và button sang phải (hoặc bạn có thể dùng space-around, flex-start, flex-end tùy ý) */
+      align-items: center; /* Căn chỉnh các phần tử theo chiều dọc ở giữa */
+      margin-bottom: 1.5rem; /* Giữ lại margin-bottom cho khoảng cách với phần tử tiếp theo */
+    }
+    
+    /* Tùy chỉnh thêm nếu cần */
+    .header-actions h1 {
+      margin-bottom: 0; /* Loại bỏ margin-bottom mặc định của tiêu đề */
+    }
+
+  // ----------------------------
+    
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+  }
+
+  /* Popup Content */
+  .popup-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 400px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      animation: slideIn 0.3s ease-out;
+  }
+
+  /* Animation */
+  @keyframes slideIn {
+      from {
+          transform: translateY(-100px);
+          opacity: 0;
+      }
+      to {
+          transform: translateY(0);
+          opacity: 1;
+      }
+  }
+
+  /* Header */
+  .popup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+  }
+
+  .popup-header h5 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #333;
+  }
+
+  .close-button {
+      border: none;
+      background: none;
+      font-size: 24px;
+      color: #666;
+      cursor: pointer;
+  }
+
+  /* Body */
+  .popup-body {
+      margin-bottom: 20px;
+  }
+
+  .form-group {
+      margin-bottom: 15px;
+  }
+
+  .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+  }
+
+  .form-control {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+  }
+
+  .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #666;
+  }
+
+  /* Footer */
+  .popup-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+  }
+
+  .btn {
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+  }
+
+  .btn-secondary {
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      color: #333;
+  }
+
+  // .btn-primary {
+  //     background: #1a47b8;
+  //     border: none;
+  //     color: white;
+  // }
+
+  .table-responsive {
+    overflow-x: hidden !important;
+  }
+
+  .table {
+    margin-bottom: 0;
+    width: 100%;
+    
+    thead {
+      th {
+        white-space: nowrap;
+        background-color: #f8f9fc;
+      }
+    }
+    
+    tbody {
+      td {
+        white-space: nowrap;
+      }
+    }
+  }
+
+  // Style cho các nút action
+  .edit-btn, .delete-btn {
+    padding: 0.25rem 0.5rem;
+    margin: 0 0.25rem;
+    
+    i {
+      font-size: 0.875rem;
+    }
+  }

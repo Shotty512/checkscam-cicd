@@ -1,0 +1,84 @@
+<div class="container mt-4 d-flex flex-column gap-2 centered-container">
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="text-center p-5">
+        <p>Đang tải dữ liệu báo cáo...</p>
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Lỗi -->
+    <div *ngIf="!isLoading && errorMessage" class="alert alert-danger w-100" role="alert">
+        {{ errorMessage }}
+    </div>
+
+    <!-- Nội dung -->
+    <ng-container *ngIf="!isLoading && !errorMessage && report.id">
+        <div class="card p-4 w-100">
+
+            <div class="report-section">
+                <label for="info-text">Thông tin liên quan</label>
+                <h4 id="info-text" class="fw-bold report-value">{{ report.info }}</h4>
+            </div>
+
+            <div class="report-section">
+                <label for="type-text">Loại thông tin</label>
+                <p id="type-text" class="report-value">
+                    {{ reportTypeEnum | informationTypeToString }}
+                </p>
+            </div>
+
+            <div class="report-section">
+                <label for="author-email">Người gửi</label>
+                <p id="author-email" class="report-value">{{ report.emailAuthorReport }}</p>
+            </div>
+
+            <div class="report-section">
+                <label for="reason-text">Hình thức lừa đảo</label>
+                <p id="reason-text" class="report-value">{{ report.reason }}</p>
+            </div>
+
+            <div class="report-section">
+                <label for="description-text">Mô tả chi tiết</label>
+                <p id="description-text" class="report-value">{{ report.infoDescription }}</p>
+            </div>
+
+            <div class="report-section">
+                <label for="attachments-section">Tệp đính kèm</label>
+
+                <div id="attachments-section" class="attachments-container mt-2"
+                    *ngIf="report.attachmentDto.length > 0; else noAttachments">
+
+                    <div *ngFor="let attachment of report.attachmentDto" class="attachment-item mb-3">
+
+                        <img [src]="getImageUrl(attachment)" [alt]="attachment.url.split('/').pop() || 'Đính kèm'"
+                            class="img-fluid rounded report-image" (click)="openImage(getImageUrl(attachment))"
+                            (error)="onImageError($event)">
+
+                        <p class="text-muted small mt-1">
+                            {{ attachment.url.split('/').pop() }}
+                        </p>
+                    </div>
+                </div>
+
+                <ng-template #noAttachments>
+                    <p class="report-value">Không có tệp đính kèm.</p>
+                </ng-template>
+            </div>
+
+        </div> <!-- /.card -->
+    </ng-container>
+
+    <button class="btn btn-primary align-self-end mt-3 mb-3" routerLink="/reports">
+        Trở lại
+    </button>
+</div>
+
+<!-- Overlay xem ảnh lớn -->
+<div class="image-overlay" *ngIf="selectedImageUrl" (click)="closeImage()">
+    <div class="image-overlay__content" (click)="$event.stopPropagation()">
+        <button type="button" class="image-overlay__close" aria-label="Đóng" (click)="closeImage()">&times;</button>
+
+        <img [src]="selectedImageUrl" alt="Ảnh phóng to" class="image-overlay__img">
+    </div>
+</div>

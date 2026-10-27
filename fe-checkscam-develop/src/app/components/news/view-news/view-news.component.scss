@@ -1,0 +1,35 @@
+  .container.mt-4 {
+      display: flex;
+      justify-content: center;
+      padding-top: 75px;
+
+    }
+    
+    .card.p-4 {
+      max-width: 800px;
+      width: 100%;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      background-color: #f9f9f9;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: #555;
+    }
+    
+    h4.fw-bold {
+      color: #333; 
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 0.5rem;
+    }
+    
+    p {
+      line-height: 1.8;
+      color: #444;
+      margin-bottom: 1rem;
+    }

@@ -1,0 +1,11 @@
+<nav class="header-nav" [class.hidden]="isHeaderHidden">
+  <div class="container">
+    <a class="brand" href="#">CheckScam</a>
+
+    <ul class="nav-links">
+      <li><a (click)="onAiTuVanClick()">AI Tư vấn</a></li>
+      <li><a routerLink="/list-news">Tin tức</a></li>
+      <li><a routerLink="/create-report">Báo cáo</a></li>
+    </ul>
+  </div>
+</nav>
