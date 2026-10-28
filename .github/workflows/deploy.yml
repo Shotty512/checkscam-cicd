@@ -1,4 +1,4 @@
-name: Deploy CheckScam
+name: CheckScam CI/CD
 
 on:
   push:
@@ -8,118 +8,208 @@ on:
 permissions:
   contents: read
 
+# Do not run two deployments to the same server concurrently.
 concurrency:
   group: checkscam-production
   cancel-in-progress: false
 
-jobs:
-  deploy:
-    name: Deploy to Ubuntu
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+env:
+  DEPLOY_DIR: /root/huytuan-compose-app/checkscam
+  COMPOSE_PROJECT: checkscam
 
+jobs:
+  ci:
+    name: CI - Validate source and Compose
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - name: Checkout source
+      - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Check project files
+      - name: Validate required files
+        shell: bash
         run: |
           set -euo pipefail
           test -f docker-compose.yml
           test -f checkscam-develop/Dockerfile
           test -f fe-checkscam-develop/Dockerfile
-          if [ -e .env ]; then
-            echo 'ERROR: .env must not be committed to GitHub'
+          test ! -e .env
+          if git ls-files --error-unmatch .env >/dev/null 2>&1; then
+            echo 'ERROR: Root .env is tracked in Git!'
             exit 1
           fi
 
-      - name: Set up SSH from GitHub Secrets
+      - name: Validate Docker Compose syntax (without server secrets)
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker compose -f docker-compose.yml config --no-interpolate --quiet
+          echo 'CI checks passed.'
+
+  cd:
+    name: CD - Deploy to Ubuntu
+    needs: ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH using GitHub Secrets
+        shell: bash
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
-        run: |
-          set -euo pipefail
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
-          ssh-keygen -lf ~/.ssh/known_hosts >/dev/null
-
-      - name: Verify SSH connection and server prerequisites
-        env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
           SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
           set -euo pipefail
+          test -n "$SSH_PRIVATE_KEY"
+          test -n "$SSH_KNOWN_HOSTS"
+          test -n "$SSH_HOST"
+          test -n "$SSH_USER"
           [[ "$SSH_PORT" =~ ^[0-9]+$ ]]
-          ssh -i ~/.ssh/id_ed25519 \
-            -p "$SSH_PORT" \
-            -o BatchMode=yes \
-            -o StrictHostKeyChecking=yes \
-            "$SSH_USER@$SSH_HOST" \
-            'test -d /root/huytuan-compose-app/checkscam && test -f /root/huytuan-compose-app/checkscam/.env && command -v docker && command -v rsync && command -v curl'
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$HOME/.ssh/id_ed25519"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/id_ed25519" "$HOME/.ssh/known_hosts"
+          ssh-keygen -y -f "$HOME/.ssh/id_ed25519" >/dev/null
+          ssh-keygen -lf "$HOME/.ssh/known_hosts" >/dev/null
 
-      - name: Copy source to Ubuntu (preserve .env and .git)
+      - name: Check connection and target directory
+        shell: bash
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
           SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          set -euo pipefail
+          ssh -i "$HOME/.ssh/id_ed25519" -p "$SSH_PORT" \
+            -o BatchMode=yes -o StrictHostKeyChecking=yes \
+            "$SSH_USER@$SSH_HOST" \
+            "test -d '$DEPLOY_DIR' && test -s '$DEPLOY_DIR/.env' && command -v docker && command -v rsync && command -v curl"
+
+      - name: Synchronize source (preserve server .env and volumes)
+        shell: bash
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
           set -euo pipefail
           rsync -az --itemize-changes \
             --exclude='.git/' \
-            --exclude='.env' \
-            --exclude='.env.*' \
+            --exclude='.env' --exclude='.env.*' \
             --exclude='node_modules/' \
-            --exclude='.gradle/' \
-            --exclude='build/' \
-            --exclude='dist/' \
-            --exclude='*.pem' \
-            --exclude='*.key' \
+            --exclude='.gradle/' --exclude='build/' --exclude='dist/' \
+            --exclude='*.pem' --exclude='*.key' \
+            --exclude='*.p12' --exclude='*.pfx' \
             -e "ssh -i $HOME/.ssh/id_ed25519 -p $SSH_PORT -o BatchMode=yes -o StrictHostKeyChecking=yes" \
-            ./ "$SSH_USER@$SSH_HOST:/root/huytuan-compose-app/checkscam/"
+            ./ "$SSH_USER@$SSH_HOST:$DEPLOY_DIR/"
+          # No --delete: protects any existing untracked server files.
 
-      - name: Build, deploy and verify
+      - name: Build and deploy backend / frontend
+        shell: bash
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
           SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
           set -euo pipefail
-          ssh -i ~/.ssh/id_ed25519 \
-            -p "$SSH_PORT" \
-            -o BatchMode=yes \
-            -o StrictHostKeyChecking=yes \
+          ssh -i "$HOME/.ssh/id_ed25519" -p "$SSH_PORT" \
+            -o BatchMode=yes -o StrictHostKeyChecking=yes \
             "$SSH_USER@$SSH_HOST" 'bash -se' <<'REMOTE'
           set -euo pipefail
           cd /root/huytuan-compose-app/checkscam
           test -s .env
           docker compose -p checkscam config -q
 
-          echo '=== Build backend and frontend ==='
+          # Do not recreate MySQL, certbot, or delete volumes.
           docker compose -p checkscam build backend frontend
-
-          echo '=== Deploy backend, then frontend, then nginx ==='
           docker compose -p checkscam up -d --no-deps --wait --wait-timeout 300 backend
           docker compose -p checkscam up -d --no-deps --wait --wait-timeout 180 frontend
           docker compose -p checkscam up -d --no-deps --wait --wait-timeout 180 nginx-proxy
+          REMOTE
 
-          echo '=== Container status ==='
+  verify:
+    name: Verify - Containers, logs and HTTP health
+    needs: cd
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Set up SSH using GitHub Secrets
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          set -euo pipefail
+          test -n "$SSH_PRIVATE_KEY"
+          test -n "$SSH_KNOWN_HOSTS"
+          test -n "$SSH_HOST"
+          test -n "$SSH_USER"
+          [[ "$SSH_PORT" =~ ^[0-9]+$ ]]
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$HOME/.ssh/id_ed25519"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/id_ed25519" "$HOME/.ssh/known_hosts"
+          ssh-keygen -y -f "$HOME/.ssh/id_ed25519" >/dev/null
+          ssh-keygen -lf "$HOME/.ssh/known_hosts" >/dev/null
+
+      - name: Verify running services, logs, HTTP and health
+        shell: bash
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          set -euo pipefail
+          ssh -i "$HOME/.ssh/id_ed25519" -p "$SSH_PORT" \
+            -o BatchMode=yes -o StrictHostKeyChecking=yes \
+            "$SSH_USER@$SSH_HOST" 'bash -se' <<'REMOTE'
+          set -euo pipefail
+          cd /root/huytuan-compose-app/checkscam
+
+          echo '=== docker compose ps ==='
           docker compose -p checkscam ps
 
-          echo '=== Recent logs ==='
-          docker compose -p checkscam logs --tail=25 backend frontend nginx-proxy
+          echo '=== docker compose logs ==='
+          docker compose -p checkscam logs --tail=30 backend frontend nginx-proxy
 
-          echo '=== Backend HTTP and health check ==='
-          curl --fail --silent --show-error --max-time 15 \
-            http://127.0.0.1:8082/actuator/health
+          echo '=== Container state assertions ==='
+          for service in mysql backend frontend nginx-proxy; do
+            container_id="$(docker compose -p checkscam ps -q "$service")"
+            test -n "$container_id"
+            test "$(docker inspect -f '{{.State.Running}}' "$container_id")" = true
+          done
+          for service in mysql backend; do
+            container_id="$(docker compose -p checkscam ps -q "$service")"
+            test "$(docker inspect -f '{{.State.Health.Status}}' "$container_id")" = healthy
+          done
+
+          echo '=== Backend HTTP response and health ==='
+          curl --fail --silent --show-error --max-time 20 \
+            http://127.0.0.1:8082/actuator/health | tee /tmp/checkscam-health-response.json
           echo
+          grep -Eq '"status"[[:space:]]*:[[:space:]]*"UP"' /tmp/checkscam-health-response.json
+          rm -f /tmp/checkscam-health-response.json
 
-          echo '=== Nginx HTTP response code (may need domain Host header) ==='
-          curl --silent --show-error --max-time 15 --output /dev/null \
-            --write-out 'HTTP %{http_code}\n' \
-            http://127.0.0.1:8017/
+          echo '=== Nginx HTTP response (may need an application Host header) ==='
+          http_code="$(curl --silent --show-error --max-time 20 \
+            --output /dev/null --write-out '%{http_code}' \
+            http://127.0.0.1:8017/)"
+          echo "Nginx returned HTTP $http_code"
+          test "$http_code" != 000
+          if [[ "$http_code" =~ ^5 ]]; then
+            echo 'Nginx returned a 5xx error'
+            exit 1
+          fi
+
+          echo 'Verification passed.'
           REMOTE
