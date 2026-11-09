@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  DEPLOY_DIR: /root/huytuan-compose-app/checkscam
+  DEPLOY_DIR: /root/huytuan/checkscam-cicd
   COMPOSE_PROJECT: checkscam
 
 jobs:
@@ -122,7 +122,7 @@ jobs:
             -o BatchMode=yes -o StrictHostKeyChecking=yes \
             "$SSH_USER@$SSH_HOST" 'bash -se' <<'REMOTE'
           set -euo pipefail
-          cd /root/huytuan-compose-app/checkscam
+          cd /root/huytuan/checkscam-cicd
           test -s .env
           docker compose -p checkscam config -q
 
@@ -174,7 +174,7 @@ jobs:
             -o BatchMode=yes -o StrictHostKeyChecking=yes \
             "$SSH_USER@$SSH_HOST" 'bash -se' <<'REMOTE'
           set -euo pipefail
-          cd /root/huytuan-compose-app/checkscam
+          cd /root/huytuan/checkscam-cicd
 
           echo '=== docker compose ps ==='
           docker compose -p checkscam ps
