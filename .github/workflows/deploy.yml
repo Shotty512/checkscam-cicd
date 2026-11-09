@@ -124,13 +124,13 @@ jobs:
           set -euo pipefail
           cd /root/huytuan/checkscam-cicd
           test -s .env
-          docker compose -p checkscam config -q
+          docker compose -p checkscam-cicd config -q
 
           # Do not recreate MySQL, certbot, or delete volumes.
-          docker compose -p checkscam build backend frontend
-          docker compose -p checkscam up -d --no-deps --wait --wait-timeout 300 backend
-          docker compose -p checkscam up -d --no-deps --wait --wait-timeout 180 frontend
-          docker compose -p checkscam up -d --no-deps --wait --wait-timeout 180 nginx-proxy
+          docker compose -p checkscam-cicd build backend frontend
+          docker compose -p checkscam-cicd up -d --no-deps --wait --wait-timeout 300 backend
+          docker compose -p checkscam-cicd up -d --no-deps --wait --wait-timeout 180 frontend
+          docker compose -p checkscam-cicd up -d --no-deps --wait --wait-timeout 180 nginx-proxy
           REMOTE
 
   verify:
@@ -177,19 +177,19 @@ jobs:
           cd /root/huytuan/checkscam-cicd
 
           echo '=== docker compose ps ==='
-          docker compose -p checkscam ps
+          docker compose -p checkscam-cicd ps
 
           echo '=== docker compose logs ==='
-          docker compose -p checkscam logs --tail=30 backend frontend nginx-proxy
+          docker compose -p checkscam-cicd logs --tail=30 backend frontend nginx-proxy
 
           echo '=== Container state assertions ==='
           for service in mysql backend frontend nginx-proxy; do
-            container_id="$(docker compose -p checkscam ps -q "$service")"
+            container_id="$(docker compose -p checkscam-cicd ps -q "$service")"
             test -n "$container_id"
             test "$(docker inspect -f '{{.State.Running}}' "$container_id")" = true
           done
           for service in mysql backend; do
-            container_id="$(docker compose -p checkscam ps -q "$service")"
+            container_id="$(docker compose -p checkscam-cicd ps -q "$service")"
             test "$(docker inspect -f '{{.State.Health.Status}}' "$container_id")" = healthy
           done
 
